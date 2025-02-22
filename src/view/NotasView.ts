@@ -1,0 +1,71 @@
+import PromptSync from "prompt-sync";
+import { NotaService } from "../service.ts/NotaService";
+
+export class NotasView {
+
+    private nota: NotaService;
+    private prompt: (question: string) => string;
+
+    constructor() {
+        this.nota = new NotaService()
+        this.prompt = PromptSync()
+    }
+
+    public async notaMenu() {
+        console.log(' ')
+        console.log("Selecione a opção abaixo que deseja: ")
+        console.log("1- Listar notas")
+        console.log("2- Buscar nota por id")
+        console.log("3- Inserir nota")
+        console.log("4- Deletar nota")
+        console.log("5- Atualizar algum dado da nota")
+        console.log("6- Sair")
+
+        let opcao = this.prompt("Digite a opção que deseja: ")
+        switch (opcao) {
+            case '1':
+            let mostrarNota = await this.nota.listarNotas()
+            console.table(mostrarNota)
+            return this.notaMenu()
+
+            case '2':
+            let searchId = this.prompt('Digite o id de notas para procurar: ')
+            let resultSearch = await this.nota.buscarPorId(searchId)
+            console.table(resultSearch)
+            return this.notaMenu()
+
+            case '3':
+            let idInserir = this.prompt("Digite o id da nota que deseja inserir: ")
+            let idProfInseir = this.prompt("Digite o id do professor para inserir: ")
+            let idAlunoInserir = this.prompt("Digite o id do aluno para inserir: ")
+            let disciplina_nota = this.prompt("Digite a disciplina para inserir: ")
+            let nota = parseInt(this.prompt("Digite a nota para inserir: "))
+            await this.nota.inserirNota(idInserir, idProfInseir, idAlunoInserir, disciplina_nota, nota)
+            console.log('Nota criada com sucesso.')
+            return this.notaMenu()
+
+            case '4':
+            let idDelete = this.prompt('Digite o id da nota para deletar: ')
+            await this.nota.deletarNota(idDelete)
+            console.log("Nota deletada com sucesso")
+            return this.notaMenu()
+                
+            case '5':
+            let notaatt = await this.prompt('Digite o id da nota para atualizar: ')
+            let cacarId = await this.nota.buscarPorId(notaatt)
+            let coluna = await this.prompt('O que quer atualizar: ')
+            let registro = await this.prompt('Para o que deseja atualizar: ')
+            await this.nota.atualizarNota(notaatt, coluna, registro)
+            console.log('Nota atualizada')
+            return this.notaMenu()
+
+            case '6':
+            console.log("Saindo...")
+            break;
+
+            default:
+                console.log("Opção inválida.")
+                this.notaMenu()
+        }
+    }
+}
