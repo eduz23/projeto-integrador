@@ -24,44 +24,51 @@ export class NotasView {
         let opcao = this.prompt("Digite a opção que deseja: ")
         switch (opcao) {
             case '1':
-            let mostrarNota = await this.nota.listarNotas()
-            console.table(mostrarNota)
-            return this.notaMenu()
+                let mostrarNota = await this.nota.listarNotas()
+                console.table(mostrarNota)
+                return this.notaMenu()
 
             case '2':
-            let searchId = this.prompt('Digite o id de notas para procurar: ')
-            let resultSearch = await this.nota.buscarPorId(searchId)
-            console.table(resultSearch)
-            return this.notaMenu()
+                let searchId = this.prompt('Digite o id de notas para procurar: ')
+                let resultSearch = await this.nota.buscarPorId(searchId)
+                console.table(resultSearch)
+                return this.notaMenu()
 
             case '3':
-            let idInserir = this.prompt("Digite o id da nota que deseja inserir: ")
-            let idProfInseir = this.prompt("Digite o id do professor para inserir: ")
-            let idAlunoInserir = this.prompt("Digite o id do aluno para inserir: ")
-            let disciplina_nota = this.prompt("Digite a disciplina para inserir: ")
-            let nota = parseInt(this.prompt("Digite a nota para inserir: "))
-            await this.nota.inserirNota(idInserir, idProfInseir, idAlunoInserir, disciplina_nota, nota)
-            console.log('Nota criada com sucesso.')
-            return this.notaMenu()
+                let idInserir = this.prompt("Digite o id da nota que deseja inserir: ")
+                let idProfInseir = this.prompt("Digite o id do professor para inserir: ")
+                let idAlunoInserir = this.prompt("Digite o id do aluno para inserir: ")
+                let disciplina_nota = this.prompt("Digite a disciplina para inserir: ")
+                let nota = parseInt(this.prompt("Digite a nota para inserir: "))
+                await this.nota.inserirNota(idInserir, idProfInseir, idAlunoInserir, disciplina_nota, nota)
+                console.log('Nota criada com sucesso.')
+                return this.notaMenu()
 
             case '4':
-            let idDelete = this.prompt('Digite o id da nota para deletar: ')
-            await this.nota.deletarNota(idDelete)
-            console.log("Nota deletada com sucesso")
-            return this.notaMenu()
-                
+                let notaDelet = this.prompt('Informe a nota por favor: ')
+                try {
+                let buscar = await this.nota.buscarPorId(notaDelet)
+                    await this.nota.deletarNota(buscar[0].getId())
+                    console.log('Nota deletada!')
+                    console.table(await this.nota.listarNotas())
+                }
+                catch (e) {
+                    console.log('Erro no sistema', e.message)
+                }
+                return this.notaMenu()
+
             case '5':
-            let notaatt = await this.prompt('Digite o id da nota para atualizar: ')
-            let cacarId = await this.nota.buscarPorId(notaatt)
-            let coluna = await this.prompt('O que quer atualizar: ')
-            let registro = await this.prompt('Para o que deseja atualizar: ')
-            await this.nota.atualizarNota(notaatt, coluna, registro)
-            console.log('Nota atualizada')
-            return this.notaMenu()
+                let notaatt = this.prompt('Digite o id da nota para atualizar: ')
+                await this.nota.buscarPorId(notaatt)
+                let coluna = this.prompt('O que quer atualizar: ')
+                let registro = this.prompt('Para o que deseja atualizar: ')
+                await this.nota.atualizarNota(notaatt, coluna, registro)
+                console.log('Nota atualizada')
+                return this.notaMenu()
 
             case '6':
-            console.log("Saindo...")
-            break;
+                console.log("Saindo...")
+                break;
 
             default:
                 console.log("Opção inválida.")

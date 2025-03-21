@@ -40,25 +40,32 @@ export class AlunoView {
                 let nome = this.prompt('Digite o nome do aluno para inserir: ')
                 let idade = parseInt(this.prompt('Digite a idade do aluno para inserir: '))
                 let turma = this.prompt('Digite a turma do aluno para inserir: ')
-                let criarAluno = await this.aluno.inserirAluno(idInserir, nome, idade, turma)
+                await this.aluno.inserirAluno(idInserir, nome, idade, turma)
                 console.log('Aluno criado com sucesso')
                 return this.alunoMenu()
 
             case '4':
-                let idDeletar = this.prompt('Digite o id do aluno que deseja deletar: ')
-                let deletarAluno = await this.aluno.deletarAluno(idDeletar)
-                console.log('Aluno deletado com sucesso!')
+                let aluno = this.prompt('Informe o aluno por favor: ')
+                try {
+                let buscar = await this.aluno.buscarPorId(aluno)
+                    await this.aluno.deletarAluno(buscar[0].getId())
+                    console.log('Cidade deletada!')
+                    console.table(await this.aluno.listarAlunos())
+                }
+                catch (e) {
+                    console.log('Erro no sistema', e.message)
+                }
                 return this.alunoMenu()
-                
+
             case '5':
-                let alunoatt = await this.prompt('Digite o id do aluno para atualizar: ')
-                let cacarId = await this.aluno.buscarPorId(alunoatt)
-                let coluna = await this.prompt('O que quer atualizar: ')
-                let registro = await this.prompt('Para o que deseja atualizar: ')
+                let alunoatt = this.prompt('Digite o id do aluno para atualizar: ')
+                await this.aluno.buscarPorId(alunoatt)
+                let coluna = this.prompt('O que quer atualizar: ')
+                let registro = this.prompt('Para o que deseja atualizar: ')
                 await this.aluno.atualizarAluno(alunoatt, coluna, registro)
                 console.log('Aluno atualizado')
                 return this.alunoMenu()
-                
+
             case '6':
                 console.log("Saindo...")
                 break;
