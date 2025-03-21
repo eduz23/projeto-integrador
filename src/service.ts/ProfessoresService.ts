@@ -16,6 +16,13 @@ export class ProfessorService {
     }
 
     public async criarProfessor(id_professor: string, nome_professor: string, disciplina_professor: string, telefone_professor: string) {
+        let professorBuscar = await this.repo.buscarPorId(id_professor)
+        if(!id_professor || !nome_professor || !disciplina_professor || telefone_professor){
+            throw new Error('Todas as colunas devem ser preenchidas')
+        }
+        if(professorBuscar){
+            throw new Error('O aluno ja existe')
+        }
         await this.repo.criarProfessor(id_professor, nome_professor, disciplina_professor, telefone_professor)
     }
 
@@ -24,7 +31,7 @@ export class ProfessorService {
         const regex = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/
         let teste = regex.test(telefone_professor)
         if (!teste) console.log("Error! O telefone é inválido!")
-        else this.criarProfessor(id_professor, nome_professor, disciplina_professor, telefone_professor)
+        this.criarProfessor(id_professor, nome_professor, disciplina_professor, telefone_professor)
     }
 
     public async buscarPorId(id_professor: string): Promise<Professor[]> {
@@ -37,10 +44,21 @@ export class ProfessorService {
     }
 
     public async deletarProfessor(id:string){
+        let deletProfessor = await this.repo.buscarPorId(id)
+        if(!deletProfessor){
+            throw new Error('Professor não encontrado')
+        }
         await this.repo.deletarProfessor(id)
     }
 
     public async atualizarProfessor(id:string, coluna:string, registro:string){
+        let professor = await this.repo.buscarPorId(id)
+        if(!professor){
+            throw new Error('Id do professor não encontrado')
+        }
+        if(!id || !coluna || !registro){
+            throw new Error('Todas as colunas devem ser preenchidas')
+        }
         await this.repo.atualizarProfessor(id, coluna, registro)
     }
 }

@@ -22,14 +22,32 @@ export class NotaService {
     }
 
     public async inserirNota(id_nota:string, id_professor:string, id_aluno:string,  disciplina_nota:string, nota:number){
+        let notaBuscar = await this.repo.buscarPorId(id_nota)
+        if(!id_nota || !id_professor || !id_aluno || !disciplina_nota || !nota){
+            throw new Error('Todas as colunas devem ser preenchidas')
+        }
+        if(notaBuscar){
+            throw new Error('Já existe id com essa nota')
+        }
         await this.repo.inserirNota(id_nota, id_professor, id_aluno,  disciplina_nota, nota)
     }
 
-    public async deletarNota(id){
+    public async deletarNota(id: string){
+        let deletNota = await this.repo.deletarNota(id)
+        if(!deletNota){
+            throw new Error('Id da nota não encontrado')
+        }
         await this.repo.deletarNota(id)
     }
 
     public async atualizarNota(id:string, coluna:string, registro:string){
+        let nota = await this.repo.buscarPorId(id)
+        if(!nota){
+            throw new Error('Id da nota não encontrado')
+        }
+        if(!id || !coluna || !registro){
+            throw new Error('Todas as colunas devem ser preenchidas')
+        }
         await this.repo.atualizarNota(id, coluna, registro)
 }
 }
