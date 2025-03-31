@@ -19,4 +19,5 @@ export class Nota{
     getId(){
         return this.id_nota
     }
+
 }
