@@ -23,10 +23,13 @@ export class NotaService {
 
     public async inserirNota(id_nota:string, id_professor:string, id_aluno:string,  disciplina_nota:string, nota:number){
         let notaBuscar = await this.repo.buscarPorId(id_nota)
+        if(nota > 10){
+            throw new Error('A nota não pode ser maior que 10')
+        }
         if(!id_nota || !id_professor || !id_aluno || !disciplina_nota || !nota){
             throw new Error('Todas as colunas devem ser preenchidas')
         }
-        if(notaBuscar){
+        if(notaBuscar.length > 0){
             throw new Error('Já existe id com essa nota')
         }
         await this.repo.inserirNota(id_nota, id_professor, id_aluno,  disciplina_nota, nota)
