@@ -1,0 +1,121 @@
+Sistema de Registro de Notas para Estudantes - EduGrade
+
+O EduGrade é um sistema desenvolvido para facilitar o registro e a gestão de notas em instituições de ensino. Com uma interface intuitiva, o sistema permite o cadastro de alunos, professores e o registro de notas.
+
+Média de um aluno, criar tabela de cpf e senha no banco de dados, mostrar tabelas antes dos métodos
+
+EduGrade is a system developed to facilitate the recording and management of grades in educational institutions. The system allows the registration of students, teachers and grades.
+
+
+Requisitos funcionais:
+
+- Listar informações
+O sistema permite listar as tabelas das notas, professores e alunos.
+
+- Registro
+O sistema permite registrar alunos, professores e notas no banco de dados.
+
+- Buscar nota
+O sistema permite buscar uma nota específica.
+
+- Editar notas
+O sistema permite editar um dado selecionado da nota escolhida.
+
+- Excluir notas
+O sistema pode excluir uma nota selecionada.
+
+
+Regras de negócio:
+
+1. Nota em formato numérica
+Descrição
+Todas as notas dos alunos devem ser registradas no sistema em formato numérico.
+Justificativa
+Todas as notas devem ser lançadas em formatos numéricos para que não haja nenhum erro.
+Condições
+1.As notas devem ser inseridas exclusivamente em formato numérico.
+Ações
+1. Caso a nota esteja no formato certo, ela irá ser cadastrada
+2. Caso a nota tenha mais de 2 casas decimais, ela será arredondada.
+Exceções
+Em caso da ausência da avaliação deve ser registrado a nota “0” até que o aluno faça a avaliação ou recuperação.
+Exemplo prático
+Um professor registra a nota 9 para um aluno. O sistema aceita a entrada, armazena o valor no banco de dados.
+
+2. Alterar nota dos alunos
+Descrição
+Permitir que as notas dos alunos sejam alteradas no sistema por pessoas autorizadas, como professores ou administradores.
+Justificativa
+O sistema deve permitir a alteração na nota para que possa corrigir algum erro.
+Condições
+1. Apenas professores podem alterar a nota
+2.O sistema deve armazenar um histórico de alterações.
+Ações
+1. Antes de permitir a alteração da nota, o sistema verifica se o usuário possui as permissões necessárias
+2. A alteração é registrada no banco de dados junto com a justificativa, data e hora.
+Exceções
+Algumas instituições podem estabelecer prazos após os quais as notas não podem mais ser alteradas.
+Exemplo prático
+O professor deseja corrigir a nota de um aluno. O sistema permite a alteração após a autenticação e a justificativa.
+
+
+
+3. Mensagem de aviso
+
+Descrição
+O sistema mostra uma mensagem para professores quando algo for alterado
+Justificativa
+As notificações de aviso garantem que os usuários sejam informados se ocorreu de forma correta
+Condições
+1. O usuário deve autorizar o envio de notificações
+2. As notificações devem ser enviadas por email ou pelo aplicativo
+Ações
+1. O sistema envia uma notificação de aviso
+2. O sistema registra as notificações enviadas
+Exceções
+Se o sistema não puder enviar notificações devido a problemas de conectividade, ele deve tentar novamente em intervalos até que o envio seja bem-sucedido.
+Exemplo prático
+O sistema envia uma notificação para o professor para avisar que o prazo de alguma atividade está perto.
+
+
+Casos de uso
+
+1- Registrar nota do aluno
+Ator principal: professor
+
+pré-condições: o professor deve estar logado no sistema, o aluno deve estar registrado no sistema
+
+pós-condições: a nota é registrada no sistema, o sistema exibe uma mensagem de confirmação
+
+fluxo principal:
+1- O professor faz login no sistema
+2- O professor seleciona a disciplina, turma e o aluno
+3- O professor coloca a nota do aluno
+4- O professor confirma o registro da nota do aluno
+
+2- O aluno consultar a nota
+Ator principal: aluno
+
+pré-condições: o aluno deve estar logado no sistema, a nota já precisa estar registrada
+
+pós-condições: o aluno conseguir visualizar sua nota
+
+fluxo principal:
+1- O aluno faz login no sistema
+2- O aluno vai até a aba de notas
+3- Digita seu id do banco de dados
+4- O sistema exibe a nota para o aluno
+
+3- Atualizar nota
+Ator principal: professor
+
+pré-condições: o professor deve estar logado no sistema, alguma nota já deve estar registrada
+
+pós-condições: a nota é atualizada com sucesso, uma notificação de confirmação é mostrada
+
+fluxo principal:
+1- O professor faz login no sistema
+2- O professor seleciona a nota e a tabela para alterar
+3- O professor escolhe a nota que quer alterar
+4- O professor altera a nota 
+5- O sistema mostra uma notificação de confirmação
