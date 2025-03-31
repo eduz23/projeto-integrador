@@ -12,7 +12,8 @@ export class NotasView {
     }
 
     public async notaMenu() {
-        console.log(' ')
+        
+        console.log("------------------------")
         console.log("Selecione a opção abaixo que deseja: ")
         console.log("1- Listar notas")
         console.log("2- Buscar nota por id")
@@ -30,30 +31,42 @@ export class NotasView {
 
             case '2':
                 let searchId = this.prompt('Digite o id de notas para procurar: ')
-                let resultSearch = await this.nota.buscarPorId(searchId)
-                console.table(resultSearch)
+
+                try {
+                    let resultSearch = await this.nota.buscarPorId(searchId)
+                    console.table(resultSearch)
+                }
+                catch (e) {
+                    console.log( e.message)
+                }
                 return this.notaMenu()
 
             case '3':
                 let idInserir = this.prompt("Digite o id da nota que deseja inserir: ")
-                let idProfInseir = this.prompt("Digite o id do professor para inserir: ")
+                let idProfInserir = this.prompt("Digite o id do professor para inserir: ")
                 let idAlunoInserir = this.prompt("Digite o id do aluno para inserir: ")
                 let disciplina_nota = this.prompt("Digite a disciplina para inserir: ")
                 let nota = parseInt(this.prompt("Digite a nota para inserir: "))
-                await this.nota.inserirNota(idInserir, idProfInseir, idAlunoInserir, disciplina_nota, nota)
-                console.log('Nota criada com sucesso.')
+
+                try {
+                    await this.nota.inserirNota(idInserir, idProfInserir, idAlunoInserir, disciplina_nota, nota)
+                    console.log('Nota criada com sucesso.')
+                }
+                catch (e) {
+                    console.log(e.message)
+                }
                 return this.notaMenu()
 
             case '4':
-                let notaDelet = this.prompt('Informe a nota por favor: ')
+                let notaDelet = this.prompt('Informe o id da nota por favor: ')
                 try {
-                let buscar = await this.nota.buscarPorId(notaDelet)
+                    let buscar = await this.nota.buscarPorId(notaDelet)
                     await this.nota.deletarNota(buscar[0].getId())
                     console.log('Nota deletada!')
                     console.table(await this.nota.listarNotas())
                 }
                 catch (e) {
-                    console.log('Erro no sistema', e.message)
+                    console.log(e.message)
                 }
                 return this.notaMenu()
 
@@ -62,8 +75,14 @@ export class NotasView {
                 await this.nota.buscarPorId(notaatt)
                 let coluna = this.prompt('O que quer atualizar: ')
                 let registro = this.prompt('Para o que deseja atualizar: ')
-                await this.nota.atualizarNota(notaatt, coluna, registro)
-                console.log('Nota atualizada')
+
+                try {
+                    await this.nota.atualizarNota(notaatt, coluna, registro)
+                    console.log('Nota atualizada')
+                }
+                catch (e) {
+                    console.log(e.message)
+                }
                 return this.notaMenu()
 
             case '6':

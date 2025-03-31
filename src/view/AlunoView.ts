@@ -1,19 +1,26 @@
 import PromptSync from "prompt-sync";
 import { AlunoService } from "../service.ts/AlunoService";
 import { Pool } from "pg";
+import { Nota } from "../entity/notas";
+import { NotaService } from "../service.ts/NotaService";
 
 export class AlunoView {
 
     private aluno: AlunoService;
+    private nota: NotaService
     private prompt: (question: string) => string;
 
     constructor() {
+        this.nota = new NotaService()
         this.aluno = new AlunoService()
         this.prompt = PromptSync()
     }
 
+
+
     public async alunoMenu() {
-        console.log(' ')
+
+        console.log("------------------------")
         console.log("Selecione a opção abaixo que deseja: ")
         console.log("1- Listar alunos")
         console.log("2- Buscar por id")
@@ -31,8 +38,15 @@ export class AlunoView {
 
             case '2':
                 let idSearch = this.prompt('Digite o id do aluno que deseja procurar: ')
-                let alunoSearch = await this.aluno.buscarPorId(idSearch)
-                console.table(alunoSearch)
+
+                try {
+                    let alunoSearch = await this.aluno.buscarPorId(idSearch)
+                    console.table(alunoSearch)
+                }
+                catch (e) {
+                    console.log(e.message)
+                }
+
                 return this.alunoMenu()
 
             case '3':
@@ -40,30 +54,43 @@ export class AlunoView {
                 let nome = this.prompt('Digite o nome do aluno para inserir: ')
                 let idade = parseInt(this.prompt('Digite a idade do aluno para inserir: '))
                 let turma = this.prompt('Digite a turma do aluno para inserir: ')
-                await this.aluno.inserirAluno(idInserir, nome, idade, turma)
-                console.log('Aluno criado com sucesso')
+
+                try {
+                    await this.aluno.inserirAluno(idInserir, nome, idade, turma)
+                    console.log('Aluno criado com sucesso')
+                }
+                catch (e) {
+                    console.log(e.message)
+                }
                 return this.alunoMenu()
 
             case '4':
-                let aluno = this.prompt('Informe o aluno por favor: ')
+                let aluno = this.prompt('Informe o Id do aluno por favor: ')
                 try {
-                let buscar = await this.aluno.buscarPorId(aluno)
+                    let buscar = await this.aluno.buscarPorId(aluno)
                     await this.aluno.deletarAluno(buscar[0].getId())
-                    console.log('Cidade deletada!')
+                    console.log('Aluno deletado!')
                     console.table(await this.aluno.listarAlunos())
                 }
                 catch (e) {
-                    console.log('Erro no sistema', e.message)
+                    console.log(e.message)
                 }
                 return this.alunoMenu()
 
             case '5':
                 let alunoatt = this.prompt('Digite o id do aluno para atualizar: ')
-                await this.aluno.buscarPorId(alunoatt)
                 let coluna = this.prompt('O que quer atualizar: ')
                 let registro = this.prompt('Para o que deseja atualizar: ')
-                await this.aluno.atualizarAluno(alunoatt, coluna, registro)
-                console.log('Aluno atualizado')
+
+                try {
+                    await this.aluno.buscarPorId(alunoatt)
+                    await this.aluno.atualizarAluno(alunoatt, coluna, registro)
+                    console.log('Aluno atualizado')
+                }
+
+                catch (e) {
+                    console.log(e.message)
+                }
                 return this.alunoMenu()
 
             case '6':
