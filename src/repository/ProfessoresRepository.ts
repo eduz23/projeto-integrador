@@ -11,7 +11,7 @@ export class ProfessorRepository {
     }
 
     public async listarProfessores(): Promise<Professor[]> {
-        const cod = "SELECT * FROM system.professores"
+        const cod = "SELECT * FROM system.professores order by id_professor"
         const result = await this.pool.query(cod)
 
         const listaProfessores: Professor[] = []

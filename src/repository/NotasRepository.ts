@@ -12,7 +12,7 @@ export class NotasRepository {
 
     async listarNotas(): Promise<Nota[]> {
 
-        const cod = "SELECT * FROM system.notas"
+        const cod = "SELECT * FROM system.notas order by id_nota"
         const result = await this.pool.query(cod)
 
         const listaNotas: Nota[] = []

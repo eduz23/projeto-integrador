@@ -12,7 +12,7 @@ export class AlunosRepository{
 
     async listarAlunos(): Promise<Aluno[]>{
 
-        const  cod = "SELECT * FROM system.alunos"
+        const  cod = "SELECT * FROM system.alunos order by id_aluno"
         const result = await this.pool.query(cod)
         
         const listaAlunos: Aluno[] = []
@@ -47,12 +47,11 @@ export class AlunosRepository{
 
     public async deletarAluno(id:string){
         let cod = 'delete from system.alunos where id_aluno = $1'
-        let result = await this.pool.query(cod, [id])
-        return result
+        await this.pool.query(cod, [id])
     }
 
     public async atualizarAluno(id:string, coluna:string, registro:string):Promise<void>{
         let cod = `update system.alunos set ${coluna} = $1 where id_aluno = $2`
-        let result = await this.pool.query(cod, [registro, id])
+        await this.pool.query(cod, [registro, id])
     }
 }
